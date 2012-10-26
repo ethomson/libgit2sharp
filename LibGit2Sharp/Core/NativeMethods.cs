@@ -613,7 +613,7 @@ namespace LibGit2Sharp.Core
             ref GitOid oldId,
             ref GitOid newId,
             IntPtr data);
-
+        
         [DllImport(libgit2)]
         internal static extern int git_remote_update_tips(RemoteSafeHandle remote);
 
@@ -781,7 +781,7 @@ namespace LibGit2Sharp.Core
         [DllImport(libgit2)]
         internal static extern void git_threads_shutdown();
 
-        internal delegate void git_transfer_progress_callback(IntPtr stats, IntPtr payload);
+        internal delegate void git_transfer_progress_callback(ref GitTransferProgress stats, IntPtr payload);
 
         [DllImport(libgit2)]
         internal static extern int git_tree_create_fromindex(out GitOid treeOid, IndexSafeHandle index);

@@ -1042,11 +1042,11 @@ namespace LibGit2Sharp.Core
         }
 
         // TODO: callback & payload
-        public static void git_remote_download(RemoteSafeHandle remote, ref long bytes, ref GitIndexerStats indexerStats)
+        public static void git_remote_download(RemoteSafeHandle remote, NativeMethods.git_transfer_progress_callback cb)
         {
             using (ThreadAffinity())
             {
-                int res = NativeMethods.git_remote_download(remote, null, IntPtr.Zero);
+                int res = NativeMethods.git_remote_download(remote, cb, IntPtr.Zero);
                 Ensure.Success(res);
             }
         }

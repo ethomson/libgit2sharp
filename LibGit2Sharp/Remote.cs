@@ -51,20 +51,18 @@ namespace LibGit2Sharp
         /// <summary>
         ///   Fetch from the <see cref = "Remote" />.
         /// </summary>
-        /// <param name="progress">The <see cref = "FetchProgress" /> datastructure where the progress of the fetch is reported.</param>
         /// <param name="tagFetchMode">Optional parameter indicating what tags to download.</param>
         /// <param name="onProgress">Progress callback. Corresponds to libgit2 progress callback.</param>
         /// <param name="onCompletion">Completion callback. Corresponds to libgit2 completion callback.</param>
         /// <param name="onUpdateTips">UpdateTips callback. Corresponds to libgit2 update_tips callback.</param>
-        public virtual void Fetch(FetchProgress progress = null,
+        /// <param name="onTransferProgress">TransferProgress callback. Corresponds to libgit2 git_transfer_progress callback</param>
+        public virtual void Fetch(
             TagFetchMode tagFetchMode = TagFetchMode.Auto,
             ProgressHandler onProgress = null,
             CompletionHandler onCompletion = null,
-            UpdateTipsHandler onUpdateTips = null)
+            UpdateTipsHandler onUpdateTips = null,
+            TransferProgressHandler onTransferProgress = null)
         {
-            progress = progress ?? new FetchProgress();
-            progress.Reset();
-
             using (RemoteSafeHandle remoteHandle = Proxy.git_remote_load(repository.Handle, this.Name, true))
             {
                 var callbacks = new RemoteCallbacks(onProgress, onCompletion, onUpdateTips);
@@ -86,7 +84,14 @@ namespace LibGit2Sharp
                 {
                     Proxy.git_remote_connect(remoteHandle, GitDirection.Fetch);
 
-                    Proxy.git_remote_download(remoteHandle, ref progress.bytes, ref progress.IndexerStats.gitIndexerStats);
+                    NativeMethods.git_transfer_progress_callback cb = null;
+
+                    if(onTransferProgress != null)
+                    {
+                        cb = GitTransferCallbacks.GenerateCallback(onTransferProgress);
+                    }
+
+                    Proxy.git_remote_download(remoteHandle, cb);
                 }
                 finally
                 {
