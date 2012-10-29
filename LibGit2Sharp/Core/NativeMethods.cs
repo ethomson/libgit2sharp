@@ -613,7 +613,7 @@ namespace LibGit2Sharp.Core
             ref GitOid oldId,
             ref GitOid newId,
             IntPtr data);
-        
+
         [DllImport(libgit2)]
         internal static extern int git_remote_update_tips(RemoteSafeHandle remote);
 

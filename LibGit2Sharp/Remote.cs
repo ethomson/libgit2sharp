@@ -55,7 +55,8 @@ namespace LibGit2Sharp
         /// <param name="onProgress">Progress callback. Corresponds to libgit2 progress callback.</param>
         /// <param name="onCompletion">Completion callback. Corresponds to libgit2 completion callback.</param>
         /// <param name="onUpdateTips">UpdateTips callback. Corresponds to libgit2 update_tips callback.</param>
-        /// <param name="onTransferProgress">TransferProgress callback. Corresponds to libgit2 git_transfer_progress callback</param>
+        /// <param name="onTransferProgress">TransferProgress callback. Corresponds to libgit2 git_transfer_progress callback.
+        ///   Reports the client's state in downloading and processing data (bytes, objects) from the server.</param>
         public virtual void Fetch(
             TagFetchMode tagFetchMode = TagFetchMode.Auto,
             ProgressHandler onProgress = null,
@@ -83,15 +84,7 @@ namespace LibGit2Sharp
                 try
                 {
                     Proxy.git_remote_connect(remoteHandle, GitDirection.Fetch);
-
-                    NativeMethods.git_transfer_progress_callback cb = null;
-
-                    if(onTransferProgress != null)
-                    {
-                        cb = GitTransferCallbacks.GenerateCallback(onTransferProgress);
-                    }
-
-                    Proxy.git_remote_download(remoteHandle, cb);
+                    Proxy.git_remote_download(remoteHandle, onTransferProgress);
                 }
                 finally
                 {

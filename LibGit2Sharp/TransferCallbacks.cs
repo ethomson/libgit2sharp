@@ -13,15 +13,10 @@ namespace LibGit2Sharp.Core
     /// </summary>
     internal class GitTransferCallbacks
     {
-        #region Fields
-
         /// <summary>
-        ///   Managed delegate that should be called in response to a git_transfer_progress_callback callback
-        ///   from libgit2.
+        ///   Managed delegate to be called in response to a git_transfer_progress_callback callback from libgit2.
         /// </summary>
         private TransferProgressHandler onTransferProgress;
-
-        #endregion
 
         /// <summary>
         ///   Constructor to set up the native callback given managed delegate.
@@ -33,7 +28,7 @@ namespace LibGit2Sharp.Core
         }
 
         /// <summary>
-        ///   Generates the native git_transfer_progress_callback delegate that wraps the <see cref = "TransferProgressHandler" /> delegate. 
+        ///   Generates the native git_transfer_progress_callback delegate that wraps the <see cref = "TransferProgressHandler" /> delegate.
         /// </summary>
         /// <param name="onTransferProgress">The <see cref = "TransferProgressHandler" /> delegate to call in responde to a the native git_transfer_progress_callback callback.</param>
         /// <returns>A delegate method that can be passed to native libgit2 matching git_transfer_progress_callback function.</returns>
@@ -50,6 +45,6 @@ namespace LibGit2Sharp.Core
         public void OnGitTransferProgress(ref GitTransferProgress progress, IntPtr payload)
         {
             onTransferProgress(new TransferProgress(progress));
-        }   
+        }
     }
 }
