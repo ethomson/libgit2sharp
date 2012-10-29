@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using LibGit2Sharp.Core;
 
 namespace LibGit2Sharp
@@ -11,6 +8,8 @@ namespace LibGit2Sharp
     /// </summary>
     public class TransferProgress
     {
+        private GitTransferProgress gitTransferProgress;
+
         /// <summary>
         ///   Empty constructor.
         /// </summary>
@@ -28,55 +27,45 @@ namespace LibGit2Sharp
         /// <summary>
         ///   Total number of objects.
         /// </summary>
-        [CLSCompliant(false)]
-        public virtual uint TotalObjectCount
+        public virtual int TotalObjectCount
         {
             get
             {
-                return gitTransferProgress.total_objects;
+                return (int) gitTransferProgress.total_objects;
             }
         }
 
         /// <summary>
         ///   Number of objects indexed.
         /// </summary>
-        [CLSCompliant(false)]
-        public virtual uint IndexedObjectCount
+        public virtual int IndexedObjectCount
         {
             get
             {
-                return gitTransferProgress.indexed_objects;
+                return (int) gitTransferProgress.indexed_objects;
             }
         }
 
         /// <summary>
         ///   Number of objects received.
         /// </summary>
-        [CLSCompliant(false)]
-        public virtual uint ReceivedObjectCount
+        public virtual int ReceivedObjectCount
         {
             get
             {
-                return gitTransferProgress.received_objects;
+                return (int) gitTransferProgress.received_objects;
             }
         }
 
         /// <summary>
         ///   Number of bytes received.
         /// </summary>
-        [CLSCompliant(false)]
-        public virtual ulong BytesReceived
+        public virtual long BytesReceived
         {
             get
             {
-                return (ulong) gitTransferProgress.received_bytes;
+                return (long) gitTransferProgress.received_bytes;
             }
         }
-
-        #region Fields
-
-        internal GitTransferProgress gitTransferProgress;
-
-        #endregion
     }
 }
