@@ -394,6 +394,45 @@ namespace LibGit2Sharp
 
             return discoveredPath.Native;
         }
+        /// <summary>
+        /// Clone with all options set to default.
+        /// </summary>
+        /// <param name="sourceUrl">URI for the remote repository</param>
+        /// <param name="workdirPath">Local path to clone into</param>
+        /// <returns></returns>
+        public static Repository Clone(string sourceUrl, string workdirPath)
+        {
+            return Clone(sourceUrl, workdirPath, null);
+        }
+
+        /// <summary>
+        /// Clone with specified options.
+        /// </summary>
+        /// <param name="sourceUrl">URI for the remote repository</param>
+        /// <param name="workdirPath">Local path to clone into</param>
+        /// <param name="options">Optional parameters. Null indicates defaults.</param>
+        /// <returns></returns>
+        public static Repository Clone(string sourceUrl, string workdirPath, CloneOptions options)
+        {
+            options = options ?? new CloneOptions();
+
+            GitCheckoutOptions nativeOpts = null;
+            if (options.Checkout)
+            {
+                var checkoutOptions = new CheckoutOptions();
+                nativeOpts = checkoutOptions.checkoutOptions;
+            }
+
+            NativeMethods.git_transfer_progress_callback cb = (options.TransferProgress != null) ?
+                GitTransferCallbacks.GenerateCallback(options.TransferProgress) : null;
+
+            RepositorySafeHandle repo = options.Bare
+                                            ? Proxy.git_clone_bare(sourceUrl, workdirPath, cb)
+                                            : Proxy.git_clone(sourceUrl, workdirPath, cb, nativeOpts);
+            repo.SafeDispose();
+
+            return new Repository(workdirPath);
+        }
 
         /// <summary>
         ///   Checkout the specified branch, reference or SHA.

@@ -64,7 +64,7 @@
     <Compile Include="BranchCollectionExtensions.cs" />
     <Compile Include="Changes.cs" />
     <Compile Include="CheckoutOptions.cs" />
-    <Compile Include="CloneOperation.cs" />
+    <Compile Include="CloneOptions.cs" />
     <Compile Include="Commit.cs" />
     <Compile Include="CommitLog.cs" />
     <Compile Include="Configuration.cs" />
