@@ -57,6 +57,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CloneOperationFixture.cs" />
     <Compile Include="MetaFixture.cs" />
     <Compile Include="MockedRepositoryFixture.cs" />
     <Compile Include="ConfigurationFixture.cs" />

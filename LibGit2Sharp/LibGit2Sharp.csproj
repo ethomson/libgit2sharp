@@ -63,6 +63,8 @@
     <Compile Include="BranchCollection.cs" />
     <Compile Include="BranchCollectionExtensions.cs" />
     <Compile Include="Changes.cs" />
+    <Compile Include="CheckoutOptions.cs" />
+    <Compile Include="CloneOperation.cs" />
     <Compile Include="Commit.cs" />
     <Compile Include="CommitLog.cs" />
     <Compile Include="Configuration.cs" />
@@ -78,6 +80,7 @@
     <Compile Include="Core\GitRemoteCallbacks.cs" />
     <Compile Include="RemoteCallbacks.cs" />
     <Compile Include="RemoteCompletionType.cs" />
+    <Compile Include="Core\GitCheckoutOptions.cs" />
     <Compile Include="TagCollectionExtensions.cs" />
     <Compile Include="Core\Compat\Environment.cs" />
     <Compile Include="Core\FilePath.cs" />
