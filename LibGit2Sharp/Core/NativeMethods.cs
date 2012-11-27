@@ -417,6 +417,38 @@ namespace LibGit2Sharp.Core
         [DllImport(libgit2)]
         internal static extern int git_index_write_tree(out GitOid treeOid, IndexSafeHandle index);
 
+        internal delegate int merge_strategy_delegate(
+            RepositorySafeHandle repo,
+            GitObjectSafeHandle our_commit,
+            GitObjectSafeHandle ancestor_commit,
+            IntPtr[] their_commits,
+            int their_commits_length,
+            IntPtr data);
+
+        [DllImport(libgit2)]
+        internal static extern int git_merge(
+            out IntPtr git_merge_result,
+            RepositorySafeHandle repo,
+            [MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 2)] [In] IntPtr[] their_heads,
+              int their_heads_length,
+              GitMergeOptionFlags flags,
+              [MarshalAs(UnmanagedType.FunctionPtr)] merge_strategy_delegate merge_strategy,
+              IntPtr strategy_data);
+
+        [DllImport(libgit2)]
+        internal static extern int git_merge_head_from_oid(
+            out MergeHeadSafeHandle mergeHead,
+            ref GitOid oid);
+
+        [DllImport(libgit2)]
+        internal static extern int git_merge_head_from_ref(
+            out MergeHeadSafeHandle mergeHead,
+            ReferenceSafeHandle reference);
+
+        [DllImport(libgit2)]
+        internal static extern int git_merge_head_free(
+            IntPtr mergeHead);
+
         [DllImport(libgit2)]
         internal static extern int git_merge_base(
             out GitOid mergeBase,

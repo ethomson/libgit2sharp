@@ -77,8 +77,13 @@
     <Compile Include="Core\ILazy.cs" />
     <Compile Include="Core\LazyGroup.cs" />
     <Compile Include="Core\Proxy.cs" />
+    <Compile Include="MergeOptions.cs" />
+    <Compile Include="MergeResult.cs" />
     <Compile Include="Handlers.cs" />
+    <Compile Include="Merge.cs" />
     <Compile Include="MergeConflictException.cs" />
+    <Compile Include="MergeHead.cs" />
+    <Compile Include="MergeHeadSafeHandle.cs" />
     <Compile Include="ReferenceCollectionExtensions.cs" />
     <Compile Include="Core\GitRemoteCallbacks.cs" />
     <Compile Include="RemoteCallbacks.cs" />

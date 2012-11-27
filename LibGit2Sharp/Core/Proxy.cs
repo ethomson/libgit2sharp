@@ -725,6 +725,82 @@ namespace LibGit2Sharp.Core
             }
         }
 
+        public static MergeResult git_merge(RepositorySafeHandle repo, MergeHeadSafeHandle[] heads, GitMergeOptionFlags flags)
+        {
+            using (ThreadAffinity())
+            {
+                IntPtr ret;
+                IntPtr[] their_heads = new IntPtr[heads.Length];
+                for (int i = 0; i < heads.Length; i++)
+                {
+                    their_heads[i] = heads[i].DangerousGetHandle();
+                }
+
+                int res = NativeMethods.git_merge(
+                    out ret,
+                    repo,
+                    their_heads,
+                    their_heads.Length,
+                    flags,
+                    null,
+                    IntPtr.Zero);
+
+                if (res == (int)GitErrorCode.NotFound)
+                {
+                    return null;
+                }
+
+                Ensure.Success(res);
+
+                MergeResult result = new MergeResult();
+                Marshal.PtrToStructure(ret, result);
+
+
+                return result;
+            }
+        }
+
+        public static MergeHeadSafeHandle git_merge_head_from_oid(GitOid oid)
+        {
+            MergeHeadSafeHandle ret;
+
+            int res = NativeMethods.git_merge_head_from_oid(
+                out ret,
+                ref oid);
+
+            if (res == (int)GitErrorCode.NotFound)
+            {
+                return null;
+            }
+
+            Ensure.Success(res);
+
+            return ret;
+        }
+
+        public static MergeHeadSafeHandle git_merge_head_from_ref(ReferenceSafeHandle reference)
+        {
+            MergeHeadSafeHandle ret;
+
+            int res = NativeMethods.git_merge_head_from_ref(
+                out ret,
+                reference);
+
+            if (res == (int)GitErrorCode.NotFound)
+            {
+                return null;
+            }
+
+            Ensure.Success(res);
+
+            return ret;
+        }
+
+        public static void git_merge_head_free(IntPtr mergeHead)
+        {
+            NativeMethods.git_merge_head_free(mergeHead);
+        }
+
         #endregion
 
         #region git_message_

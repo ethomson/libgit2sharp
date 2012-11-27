@@ -27,6 +27,7 @@ namespace LibGit2Sharp
         private readonly TagCollection tags;
         private readonly Lazy<RepositoryInformation> info;
         private readonly Diff diff;
+        private readonly Merge merge;
         private readonly NoteCollection notes;
         private readonly Lazy<ObjectDatabase> odb;
         private readonly Stack<IDisposable> toCleanup = new Stack<IDisposable>();
@@ -97,6 +98,7 @@ namespace LibGit2Sharp
             remotes = new Lazy<RemoteCollection>(() => new RemoteCollection(this));
             odb = new Lazy<ObjectDatabase>(() => new ObjectDatabase(this));
             diff = new Diff(this);
+            merge = new Merge(this);
             notes = new NoteCollection(this);
         }
 
@@ -222,6 +224,14 @@ namespace LibGit2Sharp
         public Diff Diff
         {
             get { return diff; }
+        }
+
+        /// <summary>
+        ///   Provides access to merging functionalities
+        /// </summary>
+        public Merge Merge
+        {
+            get { return merge; }
         }
 
         /// <summary>
