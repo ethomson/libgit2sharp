@@ -26,6 +26,7 @@ namespace LibGit2Sharp
         private readonly Index index;
         private readonly ReferenceCollection refs;
         private readonly Lazy<RemoteCollection> remotes;
+        private readonly MergeHeadCollection mergeHead;
         private readonly TagCollection tags;
         private readonly Lazy<RepositoryInformation> info;
         private readonly Diff diff;
@@ -99,6 +100,7 @@ namespace LibGit2Sharp
             info = new Lazy<RepositoryInformation>(() => new RepositoryInformation(this, isBare));
             config = new Lazy<Configuration>(() => RegisterForCleanup(new Configuration(this, configurationGlobalFilePath, configurationXDGFilePath, configurationSystemFilePath)));
             remotes = new Lazy<RemoteCollection>(() => new RemoteCollection(this));
+            mergeHead = new MergeHeadCollection(this);
             odb = new Lazy<ObjectDatabase>(() => new ObjectDatabase(this));
             diff = new Diff(this);
             notes = new NoteCollection(this);
@@ -210,6 +212,14 @@ namespace LibGit2Sharp
         public RemoteCollection Remotes
         {
             get { return remotes.Value; }
+        }
+
+        /// <summary>
+        ///   Lookup the current heads for an ongoing merge.
+        /// </summary>
+        public MergeHeadCollection MergeHead
+        {
+            get { return mergeHead; }
         }
 
         /// <summary>
@@ -622,7 +632,16 @@ namespace LibGit2Sharp
                 return Enumerable.Empty<Commit>();
             }
 
-            return new[] { Head.Tip };
+            List<Commit> parents = new List<Commit>();
+
+            parents.Add(Head.Tip);
+
+            if (Info.CurrentOperation == CurrentOperation.Merge)
+            {
+                parents.AddRange(MergeHead);
+            }
+
+            return parents;
         }
 
         /// <summary>

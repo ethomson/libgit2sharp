@@ -528,6 +528,58 @@ namespace LibGit2Sharp.Tests
         }
 
         [Fact]
+        public void CommittingParentsFromMergeHead()
+        {
+            SelfCleaningDirectory scd = BuildSelfCleaningDirectory();
+
+            using (var repo = Repository.Init(scd.DirectoryPath))
+            {
+                string dir = repo.Info.Path;
+                Assert.True(Path.IsPathRooted(dir));
+                Assert.True(Directory.Exists(dir));
+
+                const string relativeFilepath = "new.txt";
+                string filePath = Path.Combine(repo.Info.WorkingDirectory, relativeFilepath);
+
+                var author = DummySignature;
+
+                File.WriteAllText(filePath, "1\n2\n3\n4\n5\n");
+                repo.Index.Stage(relativeFilepath);
+                Commit commit = repo.Commit("Parent", author, author);
+                ObjectId parentId = commit.Id;
+
+                Branch branch = repo.CreateBranch("branch", commit);
+                repo.Checkout(branch);
+
+                File.WriteAllText(filePath, "line one\n2\n3\n4\n5\n");
+                repo.Index.Stage(relativeFilepath);
+                commit = repo.Commit("Branch", author, author);
+                ObjectId branchId = commit.Id;
+
+                repo.Checkout("master");
+
+                File.WriteAllText(filePath, "1\n2\n3\n4\nline five\n");
+                repo.Index.Stage(relativeFilepath);
+                
+                string mergeHeadPath = Path.Combine(repo.Info.Path, "MERGE_HEAD");
+                string mergeMsgPath = Path.Combine(repo.Info.Path, "MERGE_MSG");
+                string mergeModePath = Path.Combine(repo.Info.Path, "MERGE_MODE");
+                string origHeadPath = Path.Combine(repo.Info.Path, "ORIG_HEAD");
+
+                File.WriteAllText(mergeHeadPath, branchId.Sha + "\n");
+                File.WriteAllText(mergeMsgPath, "Merge commit " + branchId.Sha + "\n");
+                File.WriteAllText(mergeModePath, "no-ff");
+                File.WriteAllText(origHeadPath, parentId + "\n");
+
+                commit = repo.Commit("Master", author, author);
+
+                Assert.Equal(2, commit.Parents.Count());
+                Assert.Equal(parentId, commit.Parents.First().Id);
+                Assert.Equal(branchId, commit.Parents.Skip(1).First().Id);
+            }
+        }
+
+        [Fact]
         public void CanCommitALittleBit()
         {
             SelfCleaningDirectory scd = BuildSelfCleaningDirectory();

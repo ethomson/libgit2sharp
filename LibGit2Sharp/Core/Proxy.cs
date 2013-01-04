@@ -1336,6 +1336,14 @@ namespace LibGit2Sharp.Core
             return RepositoryStateChecker(repo, NativeMethods.git_repository_is_empty);
         }
 
+        public static ICollection<TResult> git_repository_mergehead_foreach<TResult>(RepositorySafeHandle repo, Func<GitOid, TResult> resultSelector)
+        {
+            using (ThreadAffinity())
+            {
+                return git_foreach(resultSelector, c => NativeMethods.git_repository_mergehead_foreach(repo, (ref GitOid x, IntPtr p) => c(x, p), IntPtr.Zero));
+            }
+        }
+
         public static ObjectDatabaseSafeHandle git_repository_odb(RepositorySafeHandle repo)
         {
             using (ThreadAffinity())
