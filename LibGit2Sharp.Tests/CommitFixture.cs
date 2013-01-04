@@ -539,7 +539,7 @@ namespace LibGit2Sharp.Tests
                 string mergeModePath = Path.Combine(repo.Info.Path, "MERGE_MODE");
                 string origHeadPath = Path.Combine(repo.Info.Path, "ORIG_HEAD");
 
-                File.WriteAllText(origHeadPath, "0017bd4ab1ec30440b17bae1680cff124ab5f1f6");
+                File.WriteAllText(mergeHeadPath, "0017bd4ab1ec30440b17bae1680cff124ab5f1f6");
                 File.WriteAllText(mergeMsgPath, "Merge commit 0017bd4ab1ec30440b17bae1680cff124ab5f1f6\n");
                 File.WriteAllText(mergeModePath, "no-ff");
                 File.WriteAllText(origHeadPath, "bd593285fc7fe4ca18ccdbabf027f5d689101452\n");
