@@ -528,6 +528,32 @@ namespace LibGit2Sharp.Tests
         }
 
         [Fact]
+        public void CommittingAMergeInProgressCleansUp()
+        {
+            SelfCleaningDirectory scd = BuildSelfCleaningDirectory();
+
+            using (var repo = Repository.Init(scd.DirectoryPath))
+            {
+                string mergeHeadPath = Path.Combine(repo.Info.Path, "MERGE_HEAD");
+                string mergeMsgPath = Path.Combine(repo.Info.Path, "MERGE_MSG");
+                string mergeModePath = Path.Combine(repo.Info.Path, "MERGE_MODE");
+                string origHeadPath = Path.Combine(repo.Info.Path, "ORIG_HEAD");
+
+                File.WriteAllText(origHeadPath, "0017bd4ab1ec30440b17bae1680cff124ab5f1f6");
+                File.WriteAllText(mergeMsgPath, "Merge commit 0017bd4ab1ec30440b17bae1680cff124ab5f1f6\n");
+                File.WriteAllText(mergeModePath, "no-ff");
+                File.WriteAllText(origHeadPath, "bd593285fc7fe4ca18ccdbabf027f5d689101452\n");
+
+                Commit commit = repo.Commit("Test");
+
+                Assert.False(File.Exists(mergeHeadPath));
+                Assert.False(File.Exists(mergeMsgPath));
+                Assert.False(File.Exists(mergeModePath));
+                Assert.True(File.Exists(origHeadPath));
+            }
+        }
+
+        [Fact]
         public void CanCommitALittleBit()
         {
             SelfCleaningDirectory scd = BuildSelfCleaningDirectory();

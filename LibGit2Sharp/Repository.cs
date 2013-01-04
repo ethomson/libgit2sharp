@@ -607,7 +607,11 @@ namespace LibGit2Sharp
 
             var parents = RetrieveParentsOfTheCommitBeingCreated(amendPreviousCommit);
 
-            return ObjectDatabase.CreateCommit(message, author, committer, tree, parents, "HEAD");
+            Commit result = ObjectDatabase.CreateCommit(message, author, committer, tree, parents, "HEAD");
+
+            Proxy.git_repository_merge_cleanup(handle);
+
+            return result;
         }
 
         private IEnumerable<Commit> RetrieveParentsOfTheCommitBeingCreated(bool amendPreviousCommit)

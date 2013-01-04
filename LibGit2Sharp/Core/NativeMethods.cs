@@ -715,6 +715,9 @@ namespace LibGit2Sharp.Core
         internal static extern int git_repository_is_empty(RepositorySafeHandle repo);
 
         [DllImport(libgit2)]
+        internal static extern int git_repository_merge_cleanup(RepositorySafeHandle repo);
+
+        [DllImport(libgit2)]
         internal static extern int git_repository_open(
             out RepositorySafeHandle repository,
             [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(FilePathMarshaler))] FilePath path);
