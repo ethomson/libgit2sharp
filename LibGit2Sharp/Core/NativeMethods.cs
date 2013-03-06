@@ -146,7 +146,7 @@ namespace LibGit2Sharp.Core
             byte[] remote_name_out,
             UIntPtr buffer_size,
             RepositorySafeHandle repo,
-            ReferenceSafeHandle branch);
+            [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(Utf8Marshaler))] string canonical_branch_name);
 
         [DllImport(libgit2)]
         internal static extern int git_branch_tracking_name(
