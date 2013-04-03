@@ -59,6 +59,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CheckoutFixture.cs" />
+    <Compile Include="RefdbBackendFixture.cs" />
     <Compile Include="StageFixture.cs" />
     <Compile Include="StashFixture.cs" />
     <Compile Include="CloneFixture.cs" />
