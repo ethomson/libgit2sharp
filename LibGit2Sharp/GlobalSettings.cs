@@ -24,7 +24,7 @@ namespace LibGit2Sharp
             if (Platform.OperatingSystem == OperatingSystemType.Windows)
             {
                 string managedPath = new Uri(Assembly.GetExecutingAssembly().EscapedCodeBase).LocalPath;
-                nativeLibraryPath = Path.Combine(Path.GetDirectoryName(managedPath), "lib");
+                nativeLibraryPath = Path.Combine(Path.Combine(Path.GetDirectoryName(managedPath), "lib"), "win32");
             }
 
             registeredFilters = new Dictionary<Filter, FilterRegistration>();
